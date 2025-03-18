@@ -5,7 +5,7 @@ CoordMode, Mouse, Screen
 
 ; GUI Setup
 Gui, Font, s10
-Gui, Add, GroupBox, x10 y10 w280 h190, Roblox Anti-AFK Controls
+Gui, Add, GroupBox, x10 y10 w280 h190, Anti-AFK Controls
 Gui, Add, Text, x20 y35 w70, Status:
 Gui, Add, Text, vStatusText x95 y35 w175 cRed, Stopped
 Gui, Add, Checkbox, vRandomKeys x20 y60 w260 Checked, Random movement keys (W,A,S,D)
@@ -24,14 +24,14 @@ Menu, Tray, Add, Show GUI, ShowGUI
 Menu, Tray, Add, Exit, GuiClose
 Menu, Tray, Default, Show GUI
 Menu, Tray, Icon
-Menu, Tray, Tip, Roblox Anti-AFK Tool
+Menu, Tray, Tip, Anti-AFK Tool
 
 ; Global variables
 active := false
 intervalMs := 30000
 
 ; Show the GUI
-Gui, Show, w300 h240, Roblox Anti-AFK
+Gui, Show, w300 h240, Anti-AFK Tool
 
 return
 
@@ -76,58 +76,50 @@ ToggleAntiAFK:
 return
 
 AntiAFK:
-    if WinExist("ahk_class ROBLOX") {
-        if WinActive("ahk_class ROBLOX") {
-            SB_SetText("Performing anti-AFK actions...")
-            
-            ; Check which features are enabled
-            GuiControlGet, RandomKeys
-            GuiControlGet, RandomJump
-            GuiControlGet, RandomMouse
-            
-            actionsTaken := 0
-            
-            ; Random movement keys
-            if (RandomKeys) {
-                Random, key, 1, 4
-                If (key = 1)
-                    Send, {w down}{w up}
-                Else If (key = 2)
-                    Send, {a down}{a up}
-                Else If (key = 3)
-                    Send, {s down}{s up}
-                Else
-                    Send, {d down}{d up}
-                actionsTaken += 1
-            }
-            
-            ; Random jumping
-            if (RandomJump) {
-                Random, jump, 1, 3
-                If (jump = 1) {
-                    Send, {Space}
-                    actionsTaken += 1
-                }
-            }
-            
-            ; Random mouse movement
-            if (RandomMouse) {
-                MouseGetPos, xpos, ypos
-                Random, move_x, -100, 100
-                Random, move_y, -50, 50
-                MouseMove, xpos + move_x, ypos + move_y, 5
-                actionsTaken += 1
-            }
-            
-            timeStamp := A_Hour . ":" . A_Min . ":" . A_Sec
-            GuiControl,, LastActionText, Last action: %timeStamp% (%actionsTaken% actions)
-            SB_SetText("Actions completed at " . timeStamp)
-        } else {
-            SB_SetText("Roblox window exists but is not active...")
-        }
-    } else {
-        SB_SetText("Waiting for Roblox window to open...")
+    SB_SetText("Performing anti-AFK actions...")
+    
+    ; Check which features are enabled
+    GuiControlGet, RandomKeys
+    GuiControlGet, RandomJump
+    GuiControlGet, RandomMouse
+    
+    actionsTaken := 0
+    
+    ; Random movement keys
+    if (RandomKeys) {
+        Random, key, 1, 4
+        If (key = 1)
+            Send, {w down}{w up}
+        Else If (key = 2)
+            Send, {a down}{a up}
+        Else If (key = 3)
+            Send, {s down}{s up}
+        Else
+            Send, {d down}{d up}
+        actionsTaken += 1
     }
+    
+    ; Random jumping
+    if (RandomJump) {
+        Random, jump, 1, 3
+        If (jump = 1) {
+            Send, {Space}
+            actionsTaken += 1
+        }
+    }
+    
+    ; Random mouse movement
+    if (RandomMouse) {
+        MouseGetPos, xpos, ypos
+        Random, move_x, -100, 100
+        Random, move_y, -50, 50
+        MouseMove, xpos + move_x, ypos + move_y, 5
+        actionsTaken += 1
+    }
+    
+    timeStamp := A_Hour . ":" . A_Min . ":" . A_Sec
+    GuiControl,, LastActionText, Last action: %timeStamp% (%actionsTaken% actions)
+    SB_SetText("Actions completed at " . timeStamp)
 return
 
 ; Close GUI handler
